@@ -1,0 +1,59 @@
+area_living_room:
+  module: InputSelect
+  class: InputSelect
+  dependencies: utils
+  entity: input_select.area_living_room
+  triggers:
+    - entity: sensor.switch_living_room
+      state: '1_click_up'
+      set_state: 'Night'
+    - entity: sensor.switch_living_room
+      state: '4_click_up'
+      set_state: 'Idle'
+    - entity: binary_sensor.motion_living_room
+      state: 'on'
+      set_state: 'Night'
+      condition:
+        - entity: input_select.area_living_room
+          expression: '!= "Disabled"'
+        - entity: sensor.lux_motion_living_room
+          expression: '< 10'
+    - entity: binary_sensor.motion_living_room
+      state: 'on'
+      set_state: 'Day'
+      condition:
+        - entity: input_select.area_living_room
+          expression: '!= "Disabled"'
+        - entity: sensor.lux_motion_living_room
+          expression: '> 10'
+    - entity: sensor.lux_motion_living_room
+      expression: '< 10'
+      set_state: 'Night'
+      condition:
+        - entity: input_select.area_living_room
+          expression: '!= "Disabled"'
+  states:
+    Day:
+      - entity: fan.living_room
+        state: 'on'
+      - entity: cover.curtains_living_room
+        state: 100
+      - entity: light.group_living_room
+        state: 'off'
+    Night:
+      - entity: light.group_living_room
+        state: 'on'
+        brightness: 75
+      - entity: fan.living_room
+        state: 'on'
+    Disabled:
+      - entity: media_player.chromecast
+        state: 'off'
+      - entity: media_player.tv
+        state: 'off'
+      - entity: cover.curtains_living_room
+        state: 0
+      - entity: fan.living_room
+        state: 'off'
+      - entity: light.group_living_room
+        state: 'off'

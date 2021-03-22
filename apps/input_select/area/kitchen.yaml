@@ -1,0 +1,47 @@
+area_kitchen:
+  module: InputSelect
+  class: InputSelect
+  dependencies: utils
+  timeout:
+    Night: 120
+    Day: 120
+    Sleeping: 120
+    Cooking: 3600
+  entity: input_select.area_kitchen
+  states:
+    Cooking:
+      - entity: light.group_kitchen
+        state: 'on'
+        brightness_pct: 100
+  triggers:
+    - entity: binary_sensor.motion_kitchen
+      state: 'on'
+      set_state: 'Night'
+      condition:
+        - entity: sensor.lux_motion_kitchen
+          expression: '< 8'
+        - entity: input_select.area_kitchen
+          expression: '!= "Cooking"'
+        - entity: input_select.area_kitchen
+          expression: '!= "Disabled"'
+    - entity: binary_sensor.motion_hallway_kitchen
+      state: 'on'
+      set_state: 'Night'
+      condition:
+        - entity: sensor.lux_motion_kitchen
+          expression: '< 8'
+        - entity: input_select.area_kitchen
+          expression: '!= "Cooking"'
+        - entity: input_select.area_kitchen
+          expression: '!= "Disabled"'
+  states:
+    Night:
+      - entity: light.group_kitchen
+        state: 'on'
+        brightness: 75
+    Idle:
+      - entity: light.group_kitchen
+        state: 'off'
+    Disabled:
+      - entity: light.group_kitchen
+        state: 'off'

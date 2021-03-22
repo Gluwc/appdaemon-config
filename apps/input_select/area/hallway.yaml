@@ -1,0 +1,19 @@
+area_hallway:
+  module: InputSelect
+  class: InputSelect
+  dependencies: utils
+  timeout:
+    Night: 120
+    Day: 120
+  entity: input_select.area_hallway
+  triggers:
+    - entity: binary_sensor.motion_hallway
+      state: 'on'
+      set_state: 'Night'
+  states:
+    Night:
+      - entity: light.group_hallway
+        state: 'on'
+    Idle:
+      - entity: light.group_hallway
+        state: 'off'
