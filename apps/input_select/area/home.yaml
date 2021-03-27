@@ -15,7 +15,7 @@ area_home:
       set_state: Away
       condition:
         - entity: input_select.person_elisa
-          state: 'Away'
+          state: "Away"
     - entity: input_select.person_lucas
       state: Sleeping
       set_state: Sleeping
@@ -40,7 +40,7 @@ area_home:
       set_state: Away
       condition:
         - entity: input_select.person_lucas
-          state: 'Away'
+          state: "Away"
     - entity: input_select.person_elisa
       state: Sleeping
       set_state: Sleeping
@@ -98,13 +98,13 @@ area_home:
       - entity: climate.home
         state: 20
       - entity: light.mirror_bathroom
-        state: 'off'
+        state: "off"
       - entity: input_select.animal_luna
-        state: 'Sleeping'
+        state: "Sleeping"
       - entity: input_select.animal_iera
-        state: 'Sleeping'
+        state: "Sleeping"
       - entity: input_select.animal_pluis
-        state: 'Sleeping'
+        state: "Sleeping"
     Awake:
       - entity: input_select.area_kitchen
         state: Idle
@@ -119,8 +119,8 @@ area_home:
       - entity: input_select.area_hallway
         state: Idle
       - entity: input_select.animal_luna
-        state: 'Home'
+        state: "Home"
       - entity: input_select.animal_iera
-        state: 'Home'
+        state: "Home"
       - entity: input_select.animal_pluis
-        state: 'Home'
+        state: "Home"

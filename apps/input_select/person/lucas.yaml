@@ -5,18 +5,18 @@ person_lucas:
   entity: input_select.person_lucas
   triggers:
     - entity: person.lucas
-      state: 'home'
-      set_state: 'Home'
+      state: "home"
+      set_state: "Home"
     - entity: person.lucas
-      state: 'not_home'
-      set_state: 'Away'
+      state: "not_home"
+      set_state: "Away"
     - entity: sensor.switch_bed_right_bedroom
-      state: '4_click_up'
-      set_state: 'Sleeping'
+      state: "4_click_up"
+      set_state: "Sleeping"
     - entity: sensor.switch_bed_right_bedroom
-      state: '1_click_up'
-      set_state: 'Awake'
+      state: "1_click_up"
+      set_state: "Awake"
   states:
     Sleeping:
       - entity: input_select.area_bedroom
-        state: 'Disabled'
+        state: "Disabled"

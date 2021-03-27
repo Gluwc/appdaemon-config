@@ -7,21 +7,21 @@ area_closet_bedroom:
   entity: input_select.area_closet_bedroom
   triggers:
     - entity: sensor.switch_closet_left_bedroom
-      state: 'click_up'
-      set_state: 'Occupied'
+      state: click_up
+      set_state: Occupied
     - entity: sensor.switch_closet_left_bedroom
-      state: '2_click'
-      set_state: 'Idle'
+      state: 2_click
+      set_state: Idle
     - entity: sensor.switch_closet_right_bedroom
-      state: 'click_up'
-      set_state: 'Occupied'
+      state: click_up
+      set_state: Occupied
     - entity: sensor.switch_closet_right_bedroom
-      state: '2_click'
-      set_state: 'Idle'
+      state: 2_click
+      set_state: Idle
   states:
     Occupied:
       - entity: light.closet_bedroom
-        state: 'on'
+        state: "on"
     Idle:
       - entity: light.closet_bedroom
-        state: 'off'
+        state: "off"

@@ -8,35 +8,35 @@ area_toilet:
   entity: input_select.area_toilet
   triggers:
     - entity: sensor.switch_toilet
-      state: '1_click_up'
+      state: "1_click_up"
     - entity: sensor.switch_toilet
-      state: '4_click_up'
+      state: "4_click_up"
     - entity: binary_sensor.motion_toilet
-      state: 'on'
-      set_state: 'Occupied'
+      state: "on"
+      set_state: "Occupied"
       condition:
         - entity: input_select.area_toilet
           expression: '!= "Disabled"'
         - entity: input_select.area_home
           expression: '!= "Sleeping"'
     - entity: binary_sensor.motion_toilet
-      state: 'on'
-      set_state: 'Sleeping'
+      state: "on"
+      set_state: "Sleeping"
       condition:
         - entity: input_select.area_home
-          state: 'Sleeping'
+          state: "Sleeping"
   states:
     Occupied:
       - entity: light.group_toilet
-        state: 'on'
+        state: "on"
         brightness: 75
     Idle:
       - entity: light.group_toilet
-        state: 'off'
+        state: "off"
     Disabled:
       - entity: light.group_toilet
-        state: 'off'
+        state: "off"
     Sleeping:
       - entity: light.group_toilet
-        state: 'on'
+        state: "on"
         brightness: 1
