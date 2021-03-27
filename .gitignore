@@ -1,3 +1,4 @@
 .vscode
 appdaemon.yaml
 dashboards/*
+*.pyc

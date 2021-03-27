@@ -1,5 +1,6 @@
 import hassapi as hass
 
+
 class Notify(hass.Hass):
 	def initialize(self):
 		self.listen_state(self.changed, 'persistent_notification')

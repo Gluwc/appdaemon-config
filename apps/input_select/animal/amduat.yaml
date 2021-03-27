@@ -24,11 +24,11 @@ animal_amduat:
     Cooling:
       - entity: light.terrarium_amduat
         state: 'on'
-        brightness: 50
+        brightness: 25
     Heating:
       - entity: light.terrarium_amduat
         state: 'on'
-        brightness: 100
+        brightness: 75
     Sleeping:
       - entity: light.terrarium_amduat
         state: 'off'

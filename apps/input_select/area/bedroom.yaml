@@ -6,7 +6,7 @@ area_bedroom:
   triggers:
     - entity: binary_sensor.motion_living_room
       state: 'on'
-      set_state: 'Night'
+      set_state: Night
       condition:
         - entity: input_select.area_bedroom
           expression: '!= "Disabled"'
@@ -50,3 +50,5 @@ area_bedroom:
         state: 100
       - entity: light.group_bedroom
         state: 'off'
+      - entity: switch.air_purifier_bedroom
+        state: 'on'
