@@ -1,0 +1,8 @@
+thermostat:
+  module: Thermostat
+  class: Thermostat
+  entity: input_select.area_home
+  contact_sensors:
+    - entity: binary_sensor.contact_door_kitchen
+    - entity: binary_sensor.contact_window_left_living_room
+    - entity: binary_sensor.contact_window_right_living_room

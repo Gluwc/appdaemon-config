@@ -25,3 +25,4 @@ area_mirror_bathroom:
     Idle:
       - entity: light.mirror_bathroom
         state: "off"
+        transition: 10

@@ -1,5 +1,4 @@
 import hassapi as hass
-import math
 
 
 class InputSelect(hass.Hass):
@@ -8,17 +7,16 @@ class InputSelect(hass.Hass):
         self.handle = None
         self.Utils = self.get_app("utils")
         self.entity = self.args["entity"]
+
         # Set up triggers
         if "triggers" in self.args:
             for trigger in self.args["triggers"]:
                 if "entity" in trigger:
-                    self.listen_state(
-                        self.EntityCallback, trigger["entity"], config=trigger
-                    )
+                    self.listen_state(self.EntityCallback, trigger["entity"], config=trigger)
                 elif "time" in trigger:
                     self.run_daily(self.TimeCallback, trigger["time"], config=trigger)
 
-        # Listen to entity.
+        # Listen to input_select.
         self.listen_state(self.SetEntities, self.entity)
 
     # Callbacks
@@ -37,6 +35,7 @@ class InputSelect(hass.Hass):
             self.call_service("notify/persistent_notification", message=message)
 
     def SetEntities(self, entity, attribute, old, new, kwargs):
+        self.StartTimeout(self.get_state(self.entity))
         if "states" in self.args:
             if new in self.args["states"]:
                 self.Utils.SetEntities(self.args["states"], new)
@@ -46,15 +45,20 @@ class InputSelect(hass.Hass):
             self.cancel_timer(self.handle)
 
     def SetHome(self, kwargs):
-        self.call_service(
-            "input_select/select_option", entity_id=self.entity, option="Home"
-        )
+        self.call_service("input_select/select_option", entity_id=self.entity, option="Home")
 
     def ResetToIdle(self, kwargs):
-        if self.get_state(kwargs["config"]["entity"]) != "on":
-            self.call_service(
-                "input_select/select_option", entity_id=self.entity, option="Idle"
-            )
+        motion_list = []
+        for trigger in self.args["triggers"]:
+            state = self.get_state(trigger["entity"], attribute="all")
+            if "device_class" in state["attributes"]:
+                if state["attributes"]["device_class"] == "motion":
+                    if state["state"] == "on":
+                        motion_list.append(True)
+                    else:
+                        motion_list.append(False)
+        if True not in motion_list:
+            self.call_service("input_select/select_option", entity_id=self.entity, option="Idle")
         else:
             self.cancel_timer(self.handle)
             self.log(f"Trigger state still `on` for {self.entity} looping.")
@@ -62,7 +66,6 @@ class InputSelect(hass.Hass):
                 self.ResetToIdle,
                 kwargs["time"],
                 time=kwargs["time"],
-                config=kwargs["config"],
             )
 
     # Functions
@@ -77,11 +80,7 @@ class InputSelect(hass.Hass):
                         state_list.append(False)
                 elif "expression" in condition:
                     entity_state = self.get_state(condition["entity"])
-                    entity_state = (
-                        f'"{entity_state}"'
-                        if not self.Utils.isfloat(entity_state)
-                        else entity_state
-                    )
+                    entity_state = f'"{entity_state}"' if not self.Utils.isfloat(entity_state) else entity_state
                     if eval(f'{entity_state} {condition["expression"]}'):
                         state_list.append(True)
                     else:
@@ -105,20 +104,11 @@ class InputSelect(hass.Hass):
             entity_id=self.entity,
             option=config["set_state"],
         )
-        if "entity" in config:
-            self.log(
-                f'Trigger: {config["entity"]} {config["expression"] if "expression" in config else config["state"]}'
-            )
-            self.StartTimeout(self.get_state(self.entity), config)
-        else:
-            self.log("no entity")
 
-    def StartTimeout(self, state, config):
+    def StartTimeout(self, state):
         if "timeout" in self.args.keys():
             if state in self.args["timeout"]:
                 delay = self.args["timeout"][state]
                 self.cancel_timer(self.handle)
                 self.log(f"Resetting {self.entity} to Idle in {delay} seconds.")
-                self.handle = self.run_in(
-                    self.ResetToIdle, delay, time=delay, config=config
-                )
+                self.handle = self.run_in(self.ResetToIdle, delay, time=delay)

@@ -20,3 +20,5 @@ person_lucas:
     Sleeping:
       - entity: input_select.area_bedroom
         state: "Disabled"
+      - entity: switch.pc_lucas
+        state: "off"

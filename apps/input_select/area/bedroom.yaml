@@ -36,6 +36,7 @@ area_bedroom:
     Idle:
       - entity: light.group_bedroom
         state: "off"
+        transition: 10
       - entity: switch.air_purifier_bedroom
         state: "off"
     Disabled:

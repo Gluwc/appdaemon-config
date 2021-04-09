@@ -9,8 +9,10 @@ area_toilet:
   triggers:
     - entity: sensor.switch_toilet
       state: "1_click_up"
+      set_state: "Occupied"
     - entity: sensor.switch_toilet
       state: "4_click_up"
+      set_state: "Idle"
     - entity: binary_sensor.motion_toilet
       state: "on"
       set_state: "Occupied"
@@ -33,6 +35,7 @@ area_toilet:
     Idle:
       - entity: light.group_toilet
         state: "off"
+        transition: 10
     Disabled:
       - entity: light.group_toilet
         state: "off"

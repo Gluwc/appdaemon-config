@@ -25,10 +25,13 @@ animal_amduat:
       - entity: light.terrarium_amduat
         state: "on"
         brightness: 25
+        transition: 30
     Heating:
       - entity: light.terrarium_amduat
         state: "on"
         brightness: 75
+        transition: 30
     Sleeping:
       - entity: light.terrarium_amduat
         state: "off"
+        transition: 30

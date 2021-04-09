@@ -1,0 +1,3 @@
+notify:
+  module: Notify
+  class: Notify

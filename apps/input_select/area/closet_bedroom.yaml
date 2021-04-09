@@ -25,3 +25,4 @@ area_closet_bedroom:
     Idle:
       - entity: light.closet_bedroom
         state: "off"
+        transition: 10

@@ -28,6 +28,7 @@ area_home:
       condition:
         - entity: input_select.person_elisa
           expression: '!= "Sleeping"'
+
     # Elisa
     - entity: input_select.person_elisa
       state: Home
@@ -53,6 +54,7 @@ area_home:
       condition:
         - entity: input_select.person_lucas
           expression: '!= "Sleeping"'
+
   states:
     Home:
       - entity: input_select.area_kitchen
@@ -67,8 +69,6 @@ area_home:
         state: Day
       - entity: input_select.area_hallway
         state: Idle
-      - entity: climate.home
-        state: 23
     Away:
       - entity: input_select.area_kitchen
         state: Disabled
@@ -95,8 +95,6 @@ area_home:
         state: Disabled
       - entity: input_select.area_hallway
         state: Idle
-      - entity: climate.home
-        state: 20
       - entity: light.mirror_bathroom
         state: "off"
       - entity: input_select.animal_luna
@@ -105,6 +103,8 @@ area_home:
         state: "Sleeping"
       - entity: input_select.animal_pluis
         state: "Sleeping"
+      - entity: climate.home
+        state: 20
     Awake:
       - entity: input_select.area_kitchen
         state: Idle
@@ -124,3 +124,9 @@ area_home:
         state: "Home"
       - entity: input_select.animal_pluis
         state: "Home"
+    Heating:
+      - entity: climate.home
+        state: 23
+    Cooling:
+      - entity: climate.home
+        state: 20

@@ -37,6 +37,7 @@ area_kitchen:
     Idle:
       - entity: light.group_kitchen
         state: "off"
+        transition: 10
     Disabled:
       - entity: light.group_kitchen
         state: "off"

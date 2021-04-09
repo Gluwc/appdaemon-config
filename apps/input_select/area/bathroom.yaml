@@ -52,6 +52,7 @@ area_bathroom:
     Idle:
       - entity: light.group_bathroom
         state: "off"
+        transition: 10
     Disabled:
       - entity: light.group_bathroom
         state: "off"

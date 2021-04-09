@@ -17,3 +17,4 @@ area_hallway:
     Idle:
       - entity: light.group_hallway
         state: "off"
+        transition: 10
