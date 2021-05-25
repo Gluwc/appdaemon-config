@@ -1,4 +1,3 @@
-# Media Players ##########################################
 mediaplayer_chromecast:
   module: MediaPlayer
   class: MediaPlayer
@@ -29,3 +28,9 @@ mediaplayer_bedroom:
   class: MediaPlayer
   entity: media_player.bedroom_speaker
   adjust_volume: true
+
+mediaplayer_tv:
+  module: MediaPlayer
+  class: MediaPlayer
+  entity: media_player.tv
+  set_volume: 0.1

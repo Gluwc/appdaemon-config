@@ -1,5 +1,4 @@
 import hassapi as hass
-import math
 
 
 class Utils(hass.Hass):
@@ -25,8 +24,14 @@ class Utils(hass.Hass):
                 )
                 self.log(f'Set {entity["entity"]} to {entity["state"]}.')
             elif domain == "media_player":
-                self.call_service("media_player/turn_" + entity["state"], entity_id=entity["entity"])
-                self.log(f'Set {entity["entity"]} to {entity["state"]}.')
+                if "volume" in entity:
+                    self.call_service(
+                        "media_player/volume_set", entity_id=entity["entity"], volume_level=entity["volume"]
+                    )
+                    self.log(f'Set {entity["entity"]} to {entity["volume"]}.')
+                else:
+                    self.call_service("media_player/turn_" + entity["state"], entity_id=entity["entity"])
+                    self.log(f'Set {entity["entity"]} to {entity["state"]}.')
             elif domain == "climate":
                 self.call_service(
                     "climate/set_temperature",
@@ -50,43 +55,15 @@ class Utils(hass.Hass):
                 )
                 supported_features = self.get_state(entity["entity"], attribute="supported_features")
                 if entity["state"] == "on":
-                    # if supported_features == 33:
-                    #     self.cancel_timer(self.timer)
-                    #     self.timer = self.run_every(
-                    #         self.CustomTransition,
-                    #         "now",
-                    #         1,
-                    #         entity=entity["entity"],
-                    #         state="on",
-                    #         brightness=brightness,
-                    #         transition=transition,
-                    #         from_brightness=from_brightness,
-                    #     )
-                    # else:
                     self.call_service(
                         "light/turn_" + entity["state"],
                         entity_id=entity["entity"],
                         brightness_pct=brightness,
-                        # transition=transition,
                     )
                 elif entity["state"] == "off":
-                    # if supported_features == 33:
-
-                    #     self.cancel_timer(self.timer)
-                    #     self.timer = self.run_every(
-                    #         self.CustomTransition,
-                    #         "now",
-                    #         1,
-                    #         entity=entity["entity"],
-                    #         state="off",
-                    #         transition=transition,
-                    #         from_brightness=from_brightness,
-                    #     )
-                    # else:
                     self.call_service(
                         "light/turn_" + entity["state"],
                         entity_id=entity["entity"],
-                        # transition=transition,
                     )
                 self.log(f'Set {entity["entity"]} to {entity["state"]}.')
 

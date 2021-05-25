@@ -2,31 +2,44 @@ area_toilet:
   module: InputSelect
   class: InputSelect
   dependencies: utils
+
+  # Timeout
   timeout:
     Occupied: 120
     Sleeping: 120
+
+  # Entity
   entity: input_select.area_toilet
+
+  # Automation Boolean
+  automation_boolean: input_boolean.automation_area_toilet
+
+  # Triggers
   triggers:
-    - entity: sensor.switch_toilet
-      state: "1_click_up"
-      set_state: "Occupied"
-    - entity: sensor.switch_toilet
-      state: "4_click_up"
-      set_state: "Idle"
     - entity: binary_sensor.motion_toilet
       state: "on"
       set_state: "Occupied"
       condition:
         - entity: input_select.area_toilet
           expression: '!= "Disabled"'
-        - entity: input_select.area_home
+        - entity: input_select.person_elisa
+          expression: '!= "Sleeping"'
+        - entity: input_select.person_lucas
           expression: '!= "Sleeping"'
     - entity: binary_sensor.motion_toilet
       state: "on"
       set_state: "Sleeping"
       condition:
-        - entity: input_select.area_home
+        - entity: input_select.person_elisa
           state: "Sleeping"
+    - entity: binary_sensor.motion_toilet
+      state: "on"
+      set_state: "Sleeping"
+      condition:
+        - entity: input_select.person_lucas
+          state: "Sleeping"
+
+  # States
   states:
     Occupied:
       - entity: light.group_toilet

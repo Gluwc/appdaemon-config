@@ -2,12 +2,18 @@ area_mirror_bathroom:
   module: InputSelect
   class: InputSelect
   dependencies: utils
+
+  # Timeout
   timeout:
     Occupied: 120
+
+  # Entity
   entity: input_select.area_mirror_bathroom
+
+  # Triggers
   triggers:
-    - entity: sensor.switch_mirror_bathroom
-      state: "click_up"
+    - event: switch_mirror_bathroom
+      state: 1002
       set_state: "Occupied"
     - entity: binary_sensor.motion_mirror_bathroom
       state: "on"
@@ -15,9 +21,11 @@ area_mirror_bathroom:
       condition:
         - entity: input_select.area_home
           expression: '!= "Sleeping"'
-    - entity: sensor.switch_mirror_bathroom
-      state: "2_click"
+    - event: switch_mirror_bathroom
+      state: 1004
       set_state: "Idle"
+
+  # States
   states:
     Occupied:
       - entity: light.mirror_bathroom

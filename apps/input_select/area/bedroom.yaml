@@ -2,7 +2,14 @@ area_bedroom:
   module: InputSelect
   class: InputSelect
   dependencies: utils
+
+  # Entity
   entity: input_select.area_bedroom
+
+  # Automation Boolean
+  automation_boolean: input_boolean.automation_area_bedroom
+
+  # Triggers
   triggers:
     - entity: binary_sensor.motion_living_room
       state: "on"
@@ -26,6 +33,8 @@ area_bedroom:
       condition:
         - entity: input_select.area_bedroom
           expression: '!= "Disabled"'
+
+  # States
   states:
     Night:
       - entity: light.group_bedroom
@@ -44,8 +53,6 @@ area_bedroom:
         state: "off"
       - entity: switch.air_purifier_bedroom
         state: "off"
-      - entity: cover.curtains_bedroom
-        state: 0
     Day:
       - entity: cover.curtains_bedroom
         state: 100

@@ -15,12 +15,18 @@ class MediaPlayer(hass.Hass):
         if self.adjust_volume:
             self.run_daily(self.SetVolume, "23:00:00", volume=0.2)
             self.run_daily(self.SetVolume, "9:00:00", volume=0.4)
+        if "set_volume" in self.args:
+            self.listen_state(self.SetStartVolume, self.entity, volume=self.args["set_volume"])
 
     def changed(self, entity, attribute, old, new, kwargs):
         if new == "off":
             self.run_in(self.TurnOffLinked, 30)
         elif new == "playing":
             self.TurnOnLinked()
+
+    def SetStartVolume(self, entity, attribute, old, new, kwargs):
+        if new == "on":
+            self.call_service("media_player/volume_set", entity_id=self.args["entity"], volume_level=kwargs["volume"])
 
     def TurnOffLinked(self, kwargs):
         player_state = self.get_state(entity_id=self.entity)

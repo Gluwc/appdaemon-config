@@ -1,7 +1,11 @@
 area_home:
   module: InputSelect
   class: InputSelect
+
+  # Entity
   entity: input_select.area_home
+
+  # Triggers
   triggers:
     # Lucas
     - entity: input_select.person_lucas
@@ -55,6 +59,7 @@ area_home:
         - entity: input_select.person_lucas
           expression: '!= "Sleeping"'
 
+  # States
   states:
     Home:
       - entity: input_select.area_kitchen

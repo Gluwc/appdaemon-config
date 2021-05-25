@@ -2,15 +2,19 @@ animal_naga:
   module: InputSelect
   class: InputSelect
   dependencies: utils
+
+  # Entity
   entity: input_select.animal_naga
+
+  # Triggers
   triggers:
-    - entity: sensor.climate_temperature_warm_naga
+    - entity: sensor.climate_temperature_naga
       expression: "> 32"
       set_state: Cooling
       condition:
         - entity: input_select.animal_naga
           expression: '!= "Sleeping"'
-    - entity: sensor.climate_temperature_warm_naga
+    - entity: sensor.climate_temperature_naga
       expression: "< 32"
       set_state: Heating
       condition:
@@ -20,6 +24,8 @@ animal_naga:
       set_state: Heating
     - time: "23:00:00"
       set_state: Sleeping
+
+  # States
   states:
     Cooling:
       - entity: light.terrarium_naga

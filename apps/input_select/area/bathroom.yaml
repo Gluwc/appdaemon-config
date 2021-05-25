@@ -2,23 +2,32 @@ area_bathroom:
   module: InputSelect
   class: InputSelect
   dependencies: utils
+
+  # Timeout
   timeout:
     Occupied: 120
     Sleeping: 120
     Bathing: 3600
+
+  # Entity
   entity: input_select.area_bathroom
+
+  # Automation Boolean
+  automation_boolean: input_boolean.automation_area_bathroom
+
+  # Triggers
   triggers:
-    - entity: sensor.switch_toilet
-      state: "1_click_up"
+    - event: switch_toilet
+      state: 1000
       set_state: "Occupied"
-    - entity: sensor.switch_toilet
-      state: "4_click_up"
+    - event: switch_toilet
+      state: 4000
       set_state: "Idle"
-    - entity: sensor.switch_bath_bathroom
-      state: "click_up"
+    - event: switch_bath_bathroom
+      state: 1002
       set_state: "Bathing"
-    - entity: sensor.switch_bath_bathroom
-      state: "2_click"
+    - event: switch_bath_bathroom
+      state: 1004
       set_state: "Occupied"
     - entity: binary_sensor.motion_bathroom
       state: "on"
@@ -44,6 +53,8 @@ area_bathroom:
       condition:
         - entity: input_select.area_bathroom
           state: Bathing
+
+  # States
   states:
     Occupied:
       - entity: light.group_bathroom
