@@ -6,3 +6,4 @@ system:
     - entity: sensor.lucas_pc_memory_usage
     - entity: sensor.lucas_pc_storage_c_available_free_space
     - entity: sensor.lucas_pc_storage_c_total_free_space
+    - entity: switch.washer_power_off

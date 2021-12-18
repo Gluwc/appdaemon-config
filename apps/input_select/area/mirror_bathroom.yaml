@@ -21,6 +21,8 @@ area_mirror_bathroom:
       condition:
         - entity: input_select.area_home
           expression: '!= "Sleeping"'
+        - entity: input_select.area_bathroom
+          expression: '!= "Bathing"'
     - event: switch_mirror_bathroom
       state: 1004
       set_state: "Idle"

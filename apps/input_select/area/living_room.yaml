@@ -26,7 +26,9 @@ area_living_room:
         - entity: input_select.area_living_room
           expression: '!= "Disabled"'
         - entity: sensor.lux_motion_living_room
-          expression: "> 10"
+          expression: "> 25"
+        - entity: input_select.area_living_room
+          expression: '!= "Manual"'
     - entity: sensor.lux_motion_living_room
       expression: "< 10"
       set_state: "Night"
@@ -45,6 +47,10 @@ area_living_room:
         state: "off"
       - entity: media_player.tv
         volume: 0.1
+      # - entity: switch.dehumidifier
+      #   state: "on"
+      # - entity: switch.tub_fans
+      #   state: "on"
     Night:
       - entity: light.group_living_room
         state: "on"
@@ -53,6 +59,10 @@ area_living_room:
         state: "on"
       - entity: media_player.tv
         volume: 0.1
+      # - entity: switch.dehumidifier
+      #   state: "on"
+      # - entity: switch.tub_fans
+      #   state: "on"
     Disabled:
       - entity: media_player.chromecast
         state: "off"
@@ -62,3 +72,7 @@ area_living_room:
         state: "off"
       - entity: light.group_living_room
         state: "off"
+      # - entity: switch.dehumidifier
+      #   state: "off"
+      # - entity: switch.tub_fans
+      #   state: "off"

@@ -14,6 +14,8 @@ area_home:
       condition:
         - entity: input_select.person_elisa
           expression: '!= "Sleeping"'
+        - entity: input_select.person_elisa
+          expression: '!= "Home"'
     - entity: input_select.person_lucas
       state: Away
       set_state: Away
@@ -40,6 +42,8 @@ area_home:
       condition:
         - entity: input_select.person_lucas
           expression: '!= "Sleeping"'
+        - entity: input_select.person_lucas
+          expression: '!= "Home"'
     - entity: input_select.person_elisa
       state: Away
       set_state: Away

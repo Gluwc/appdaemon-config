@@ -39,6 +39,8 @@ person_elisa:
         state: "off"
       - entity: input_select.area_bedroom
         state: "Disabled"
+      - entity: input_select.area_bathroom
+        state: "Idle"
       - entity: media_player.tv
         volume: 0.05
       - entity: light.tv_living_room

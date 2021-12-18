@@ -9,13 +9,13 @@ animal_naga:
   # Triggers
   triggers:
     - entity: sensor.climate_temperature_naga
-      expression: "> 32"
+      expression: "> 30"
       set_state: Cooling
       condition:
         - entity: input_select.animal_naga
           expression: '!= "Sleeping"'
     - entity: sensor.climate_temperature_naga
-      expression: "< 32"
+      expression: "< 30"
       set_state: Heating
       condition:
         - entity: input_select.animal_naga

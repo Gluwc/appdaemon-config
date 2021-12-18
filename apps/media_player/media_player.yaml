@@ -8,25 +8,25 @@ mediaplayer_stereo:
   module: MediaPlayer
   class: MediaPlayer
   entity: media_player.stereo
-  linked: remote.logitech_harmony
+  linked: remote.logitech
   remote_device: Sony AV Receiver
 
 mediaplayer_living_room:
   module: MediaPlayer
   class: MediaPlayer
-  entity: media_player.living_room_speaker
+  entity: media_player.speaker_living_room
   adjust_volume: true
 
 mediaplayer_kitchen:
   module: MediaPlayer
   class: MediaPlayer
-  entity: media_player.kitchen_speaker
+  entity: media_player.speaker_kitchen
   adjust_volume: true
 
 mediaplayer_bedroom:
   module: MediaPlayer
   class: MediaPlayer
-  entity: media_player.bedroom_speaker
+  entity: media_player.speaker_bedroom
   adjust_volume: true
 
 mediaplayer_tv:

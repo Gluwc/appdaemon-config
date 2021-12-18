@@ -20,6 +20,12 @@ person_lucas:
     - entity: person.lucas
       state: "home"
       set_state: "Home"
+    - entity: input_boolean.sleeping_lucas
+      state: "on"
+      set_state: "Sleeping"
+    - entity: input_boolean.sleeping_lucas
+      state: "off"
+      set_state: "Awake"
     - entity: person.lucas
       state: "not_home"
       set_state: "Away"
@@ -53,3 +59,5 @@ person_lucas:
     Awake:
       - entity: cover.curtains_living_room
         state: 100
+      - entity: input_boolean.sleeping_lucas
+        state: "off"
