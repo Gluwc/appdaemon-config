@@ -5,7 +5,7 @@ area_closet_bedroom:
 
   # Timeout
   timeout:
-    Occupied: 120
+    Occupied: 300
 
   # Entity
   entity: input_select.area_closet_bedroom

@@ -3,12 +3,12 @@ import hassapi as hass
 
 class System(hass.Hass):
     def initialize(self):
-        self.run_every(self.GetUnavailable, "now", 60 * 60)
+        self.run_every(self.get_unavailable, "now", 60 * 60)
         self.exclude = []
         for entity in self.args["exclude"]:
             self.exclude.append(entity["entity"])
 
-    def GetUnavailable(self, kwargs):
+    def get_unavailable(self, kwargs):
         hass_state = self.get_state()
         unavailable_entities = []
         for entity in hass_state:

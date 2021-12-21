@@ -5,9 +5,9 @@ area_kitchen:
 
   # Timeout
   timeout:
-    Night: 120
-    Day: 120
-    Sleeping: 120
+    Night: 300
+    Day: 300
+    Sleeping: 300
     Cooking: 3600
 
   # Entity

@@ -2,19 +2,20 @@ import hassapi as hass
 
 class Animal(hass.Hass):
     def initialize(self):
-        self.listen_state(self.Humidity, self.args["humidity_entity"])
+        self.listen_state(self.get_humidity, self.args["humidity_entity"])
 
-    def Humidity(self, entity, attribute, old, new, kwargs):
+    def get_humidity(self, entity, attribute, old, new, kwargs):
         if "triggers" in self.args:
             for t in self.args["triggers"]:
-                self.log(t)
                 if float(new) <= t["humidity_low"]:
-                    self.Notify(config=t, humidity=new, low_high="low")
+                    self.notify_humidity(config=t, humidity=new, low_high="low")
+                    self.log(t)
                 elif float(new) >= t["humidity_high"]:
-                    self.Notify(config=t, humidity=new, low_high="high")
+                    self.notify_humidity(config=t, humidity=new, low_high="high")
+                    self.log(t)
         return
 
-    def Notify(self, config, humidity, low_high):
+    def notify_humidity(self, config, humidity, low_high):
         message = f"{self.args['animal']}'s humidity is too {low_high} ({humidity}%)."
         for ma in config["notify"]:
             self.notify(

@@ -13,22 +13,22 @@ class MediaPlayer(hass.Hass):
         )
         self.listen_state(self.changed, self.entity)
         if self.adjust_volume:
-            self.run_daily(self.SetVolume, "23:00:00", volume=0.2)
-            self.run_daily(self.SetVolume, "9:00:00", volume=0.4)
+            self.run_daily(self.set_volume, "23:00:00", volume=0.2)
+            self.run_daily(self.set_volume, "9:00:00", volume=0.4)
         if "set_volume" in self.args:
-            self.listen_state(self.SetStartVolume, self.entity, volume=self.args["set_volume"])
+            self.listen_state(self.set_start_volume, self.entity, volume=self.args["set_volume"])
 
     def changed(self, entity, attribute, old, new, kwargs):
         if new == "off":
-            self.run_in(self.TurnOffLinked, 30)
+            self.run_in(self.turn_off_linked, 30)
         elif new == "playing":
-            self.TurnOnLinked()
+            self.turn_on_linked()
 
-    def SetStartVolume(self, entity, attribute, old, new, kwargs):
+    def set_start_volume(self, entity, attribute, old, new, kwargs):
         if new == "on":
             self.call_service("media_player/volume_set", entity_id=self.args["entity"], volume_level=kwargs["volume"])
 
-    def TurnOffLinked(self, kwargs):
+    def turn_off_linked(self, kwargs):
         player_state = self.get_state(entity_id=self.entity)
         if player_state == "off":
             if self.remote_device:
@@ -44,7 +44,7 @@ class MediaPlayer(hass.Hass):
         else:
             self.log(f"Ignoring {self.entity}, not off.")
 
-    def TurnOnLinked(self):
+    def turn_on_linked(self):
         if self.remote_device:
             self.call_service(
                 "remote/send_command",
@@ -53,7 +53,7 @@ class MediaPlayer(hass.Hass):
                 command="PowerOn",
             )
 
-    def SetVolume(self, kwargs):
+    def set_volume(self, kwargs):
         volume = kwargs["volume"]
         self.call_service(
             "media_player/volume_set", entity_id=self.entity, volume_level=volume

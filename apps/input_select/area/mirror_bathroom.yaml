@@ -5,7 +5,7 @@ area_mirror_bathroom:
 
   # Timeout
   timeout:
-    Occupied: 120
+    Occupied: 300
 
   # Entity
   entity: input_select.area_mirror_bathroom

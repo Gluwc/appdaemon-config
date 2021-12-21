@@ -5,8 +5,8 @@ area_bathroom:
 
   # Timeout
   timeout:
-    Occupied: 120
-    Sleeping: 120
+    Occupied: 300
+    Sleeping: 300
     Bathing: 3600
 
   # Entity

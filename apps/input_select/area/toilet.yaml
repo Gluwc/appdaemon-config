@@ -5,8 +5,8 @@ area_toilet:
 
   # Timeout
   timeout:
-    Occupied: 120
-    Sleeping: 120
+    Occupied: 300
+    Sleeping: 300
 
   # Entity
   entity: input_select.area_toilet

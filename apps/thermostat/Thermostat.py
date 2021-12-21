@@ -8,24 +8,24 @@ class Thermostat(hass.Hass):
         if "contact_sensors" in self.args:
             for trigger in self.args["contact_sensors"]:
                 if "entity" in trigger:
-                    self.listen_state(self.TriggerContactSensor, trigger["entity"], config=trigger)
+                    self.listen_state(self.trigger_contact_sensor, trigger["entity"], config=trigger)
 
-        self.listen_state(self.TriggerEntity, self.args["entity"])
+        self.listen_state(self.trigger_entity, self.args["entity"])
 
-    def TriggerContactSensor(self, entity, attribute, old, new, kwargs):
-        if self.EvaluateContactSensors():
+    def trigger_contact_sensor(self, entity, attribute, old, new, kwargs):
+        if self.evaluate_contact_sensor():
             self.select_option("input_select.area_home", "Heating")
         else:
             self.select_option("input_select.area_home", "Cooling")
 
-    def TriggerEntity(self, entity, attribute, old, new, kwargs):
+    def trigger_entity(self, entity, attribute, old, new, kwargs):
         if new == "Home":
-            if self.EvaluateContactSensors():
+            if self.evaluate_contact_sensor():
                 self.select_option("input_select.area_home", "Heating")
             else:
                 self.select_option("input_select.area_home", "Cooling")
 
-    def EvaluateContactSensors(self):
+    def evaluate_contact_sensor(self):
         sensor_states = []
         for sensor in self.contact_sensors:
             sensor_states.append(self.get_state(sensor["entity"]))
