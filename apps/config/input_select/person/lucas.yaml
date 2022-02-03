@@ -1,0 +1,63 @@
+person_lucas:
+  module: InputSelect
+  class: InputSelect
+  dependencies: utils
+
+  # Entity
+  entity: input_select.person_lucas
+
+  # Charger Entity
+  charger_entity: sensor.charger_type_phone_lucas
+
+  # Mobile App
+  mobile_app: mobile_app_phone_lucas
+
+  # Automation Boolean
+  automation_boolean: input_boolean.automation_person_lucas
+
+  # Triggers
+  triggers:
+    - entity: person.lucas
+      state: "home"
+      set_state: "Home"
+    - entity: input_boolean.sleeping_lucas
+      state: "on"
+      set_state: "Sleeping"
+    - entity: input_boolean.sleeping_lucas
+      state: "off"
+      set_state: "Awake"
+    - entity: person.lucas
+      state: "not_home"
+      set_state: "Away"
+    - event: switch_bed_right_bedroom
+      state: 4000
+      set_state: "Sleeping"
+    - event: switch_bed_right_bedroom
+      state: 1000
+      set_state: "Awake"
+
+  # States
+  states:
+    Sleeping:
+      - entity: input_select.area_bedroom
+        state: "Disabled"
+      - entity: input_select.area_mirror_bathroom
+        state: "Idle"
+      - entity: fan.living_room
+        state: "off"
+      - entity: switch.pc_lucas
+        state: "off"
+      - entity: media_player.tv
+        volume: 0.05
+      - entity: light.tv_living_room
+        state: "on"
+        brightness: 10
+      - entity: cover.curtains_living_room
+        state: 0
+      - entity: cover.curtains_bedroom
+        state: 0
+    Awake:
+      - entity: cover.curtains_living_room
+        state: 100
+      - entity: input_boolean.sleeping_lucas
+        state: "off"

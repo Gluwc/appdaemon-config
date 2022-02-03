@@ -1,0 +1,30 @@
+area_system_closet_bedroom:
+  module: InputSelect
+  class: InputSelect
+  dependencies: utils
+
+  # Timeout
+  timeout:
+    Occupied: 120
+
+  # Entity
+  entity: input_select.area_system_closet_bedroom
+
+  # Triggers
+  triggers:
+    - entity: binary_sensor.contact_system_closet_bedroom
+      state: "on"
+      set_state: "Occupied"
+    - entity: binary_sensor.contact_system_closet_bedroom
+      state: "off"
+      set_state: "Idle"
+
+  # States
+  states:
+    Occupied:
+      - entity: light.system_closet_bedroom
+        state: "on"
+    Idle:
+      - entity: light.system_closet_bedroom
+        state: "off"
+        transition: 10

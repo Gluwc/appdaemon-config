@@ -1,0 +1,79 @@
+area_bathroom:
+  module: InputSelect
+  class: InputSelect
+  dependencies: utils
+
+  # Timeout
+  timeout:
+    Occupied: 300
+    Sleeping: 300
+    Bathing: 3600
+
+  # Entity
+  entity: input_select.area_bathroom
+
+  # Automation Boolean
+  automation_boolean: input_boolean.automation_area_bathroom
+
+  # Triggers
+  triggers:
+    - event: switch_toilet
+      state: 1000
+      set_state: "Occupied"
+    - event: switch_toilet
+      state: 4000
+      set_state: "Idle"
+    - event: switch_bath_bathroom
+      state: 1002
+      set_state: "Bathing"
+    - event: switch_bath_bathroom
+      state: 1004
+      set_state: "Occupied"
+    - entity: binary_sensor.motion_bathroom
+      state: "on"
+      set_state: "Occupied"
+      condition:
+        - entity: input_select.area_bathroom
+          expression: '!= "Disabled"'
+        - entity: input_select.area_bathroom
+          expression: '!= "Bathing"'
+        - entity: input_select.area_home
+          expression: '!= "Sleeping"'
+    - entity: binary_sensor.motion_bathroom
+      state: "on"
+      set_state: "Sleeping"
+      condition:
+        - entity: input_select.area_bathroom
+          expression: '!= "Disabled"'
+        - entity: input_select.area_home
+          state: Sleeping
+    - entity: binary_sensor.motion_bathroom
+      state: "on"
+      set_state: "Bathing"
+      condition:
+        - entity: input_select.area_bathroom
+          state: Bathing
+
+  # States
+  states:
+    Occupied:
+      - entity: light.group_bathroom
+        state: "on"
+        brightness: 75
+    Idle:
+      - entity: light.group_bathroom
+        state: "off"
+        transition: 10
+    Disabled:
+      - entity: light.group_bathroom
+        state: "off"
+    Sleeping:
+      - entity: light.group_bathroom
+        state: "on"
+        brightness: 1
+    Bathing:
+      - entity: light.group_bathroom
+        state: "on"
+        brightness: 1
+      - entity: light.mirror_bathroom
+        state: "off"

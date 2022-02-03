@@ -1,0 +1,141 @@
+area_home:
+  module: InputSelect
+  class: InputSelect
+
+  # Entity
+  entity: input_select.area_home
+
+  # Triggers
+  triggers:
+    # Lucas
+    - entity: input_select.person_lucas
+      state: Home
+      set_state: Home
+      condition:
+        - entity: input_select.person_elisa
+          expression: '!= "Sleeping"'
+        - entity: input_select.person_elisa
+          expression: '!= "Home"'
+    - entity: input_select.person_lucas
+      state: Away
+      set_state: Away
+      condition:
+        - entity: input_select.person_elisa
+          state: "Away"
+    - entity: input_select.person_lucas
+      state: Sleeping
+      set_state: Sleeping
+      condition:
+        - entity: input_select.person_elisa
+          expression: '!= "Home"'
+    - entity: input_select.person_lucas
+      state: Awake
+      set_state: Awake
+      condition:
+        - entity: input_select.person_elisa
+          expression: '!= "Sleeping"'
+
+    # Elisa
+    - entity: input_select.person_elisa
+      state: Home
+      set_state: Home
+      condition:
+        - entity: input_select.person_lucas
+          expression: '!= "Sleeping"'
+        - entity: input_select.person_lucas
+          expression: '!= "Home"'
+    - entity: input_select.person_elisa
+      state: Away
+      set_state: Away
+      condition:
+        - entity: input_select.person_lucas
+          state: "Away"
+    - entity: input_select.person_elisa
+      state: Sleeping
+      set_state: Sleeping
+      condition:
+        - entity: input_select.person_lucas
+          expression: '!= "Home"'
+    - entity: input_select.person_elisa
+      state: Awake
+      set_state: Awake
+      condition:
+        - entity: input_select.person_lucas
+          expression: '!= "Sleeping"'
+
+  # States
+  states:
+    Home:
+      - entity: input_select.area_kitchen
+        state: Idle
+      - entity: input_select.area_toilet
+        state: Idle
+      - entity: input_select.area_bathroom
+        state: Idle
+      - entity: input_select.area_bedroom
+        state: Day
+      - entity: input_select.area_living_room
+        state: Day
+      - entity: input_select.area_hallway
+        state: Idle
+    Away:
+      - entity: input_select.area_kitchen
+        state: Disabled
+      - entity: input_select.area_toilet
+        state: Disabled
+      - entity: input_select.area_bathroom
+        state: Disabled
+      - entity: input_select.area_bedroom
+        state: Disabled
+      - entity: input_select.area_living_room
+        state: Disabled
+      - entity: input_select.area_hallway
+        state: Idle
+    Sleeping:
+      - entity: input_select.area_kitchen
+        state: Disabled
+      - entity: input_select.area_toilet
+        state: Idle
+      - entity: input_select.area_bathroom
+        state: Idle
+      - entity: input_select.area_bedroom
+        state: Disabled
+      - entity: input_select.area_living_room
+        state: Disabled
+      - entity: input_select.area_hallway
+        state: Idle
+      - entity: light.mirror_bathroom
+        state: "off"
+      - entity: input_select.animal_luna
+        state: "Sleeping"
+      - entity: input_select.animal_iera
+        state: "Sleeping"
+      - entity: input_select.animal_pluis
+        state: "Sleeping"
+      - entity: climate.softwarethermostat
+        state: 20
+    Awake:
+      - entity: input_select.area_kitchen
+        state: Idle
+      - entity: input_select.area_toilet
+        state: Idle
+      - entity: input_select.area_bathroom
+        state: Idle
+      - entity: input_select.area_bedroom
+        state: Day
+      - entity: input_select.area_living_room
+        state: Day
+      - entity: input_select.area_hallway
+        state: Idle
+      - entity: input_select.animal_luna
+        state: "Home"
+      - entity: input_select.animal_iera
+        state: "Home"
+      - entity: input_select.animal_pluis
+        state: "Home"
+    Heating:
+      - entity: climate.softwarethermostat
+        state: 22
+    Cooling:
+      - entity: climate.softwarethermostat
+        state: 20
