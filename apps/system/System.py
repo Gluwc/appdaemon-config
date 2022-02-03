@@ -21,7 +21,7 @@ class System(hass.Hass):
                 message,
                 title="System Notification",
                 name="mobile_app_phone_lucas",
-                data={"actions": [{"action": "URI", "title": "Show", "uri": "/lovelace/2"}], "tag":"unavailable_entities"},
+                data={"actions": [{"action": "URI", "title": "Show", "uri": "/lovelace/2"}], "tag":"unavailable_entities", "channel":"Low Priority"},
             )
         elif len(unavailable_entities) == 1:
             message = f"{unavailable_entities[0]} is unavailable."
@@ -29,5 +29,5 @@ class System(hass.Hass):
                 message,
                 title="System Notification",
                 name="mobile_app_phone_lucas",
-                data={"actions": [{"action": "URI", "title": "Show", "uri": "/lovelace/2"}], "tag":"unavailable_entities"},
+                data={"actions": [{"action": "URI", "title": "Show", "uri": "/lovelace/2"}], "tag":"unavailable_entities", "channel":"Low Priority"},
             )

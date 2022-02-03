@@ -1,0 +1,4 @@
+travel_time_elisa:
+  module: TravelTime
+  class: TravelTime
+  travel_time_entity: sensor.travel_time_elisa

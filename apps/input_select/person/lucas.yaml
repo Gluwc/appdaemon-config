@@ -7,7 +7,7 @@ person_lucas:
   entity: input_select.person_lucas
 
   # Charger Entity
-  charger_entity: sensor.phone_lucas_charger_type
+  charger_entity: sensor.charger_type_phone_lucas
 
   # Mobile App
   mobile_app: mobile_app_phone_lucas

@@ -20,7 +20,7 @@ class MediaPlayer(hass.Hass):
 
     def changed(self, entity, attribute, old, new, kwargs):
         if new == "off":
-            self.run_in(self.turn_off_linked, 30)
+            self.run_in(self.turn_off_linked, 300)
         elif new == "playing":
             self.turn_on_linked()
 

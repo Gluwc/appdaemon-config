@@ -40,7 +40,7 @@ class InputSelect(hass.Hass):
                     f"notify/{self.args['mobile_app']}",
                     message="Are you awake?",
                     data={
-                        "tag":identifier,
+                        "tag": identifier,
                         "actions": [{"action": "yes", "title": "Yes"}, {"action": "no", "title": "No"}],
                     },
                 )
@@ -79,7 +79,7 @@ class InputSelect(hass.Hass):
                 self.Utils.set_entities(self.args["states"], new)
         if new == "Awake":
             self.run_in(self.set_home, 5)
-        elif new == "Disabled":
+        elif new == "Disabled" and self.handle != None:
             self.cancel_timer(self.handle)
 
     def set_home(self, kwargs):
@@ -99,7 +99,8 @@ class InputSelect(hass.Hass):
         if True not in motion_list:
             self.call_service("input_select/select_option", entity_id=self.entity, option="Idle")
         else:
-            self.cancel_timer(self.handle)
+            if self.handle != None:
+                self.cancel_timer(self.handle)
             self.log(f"Trigger state still `on` for {self.entity} looping.")
             self.handle = self.run_in(
                 self.reset_to_idle,
@@ -109,6 +110,7 @@ class InputSelect(hass.Hass):
 
     # Functions
     def run_trigger(self, config):
+        # Generate a binary list of condition states
         state_list = []
         if "condition" in config:
             for condition in config["condition"]:
@@ -124,6 +126,8 @@ class InputSelect(hass.Hass):
                         state_list.append(True)
                     else:
                         state_list.append(False)
+
+        # Check condition state list
         if False not in state_list:
             if "entity" in config:
                 state = self.get_state(config["entity"])

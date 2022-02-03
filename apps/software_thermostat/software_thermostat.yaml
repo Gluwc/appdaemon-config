@@ -1,0 +1,6 @@
+software_thermostat:
+  module: SoftwareThermostat
+  class: SoftwareThermostat
+  climate_entity: climate.softwarethermostat
+  setpoint_temperature_high: 70
+  setpoint_temperature_low: 40
