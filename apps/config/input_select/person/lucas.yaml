@@ -61,3 +61,6 @@ person_lucas:
         state: 100
       - entity: input_boolean.sleeping_lucas
         state: "off"
+    Away:
+      - entity: switch.pc_lucas
+        state: "off"

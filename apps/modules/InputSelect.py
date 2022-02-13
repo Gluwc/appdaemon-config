@@ -1,14 +1,19 @@
 import hassapi as hass
+from colorama import Fore, Back, Style
 
 
 class InputSelect(hass.Hass):
+    """
+    Main module controlling most of the automation. Based on input_selects to define states of areas, people, animals, etc.
+    """
+
     def initialize(self):
-        # Define self variables
-        self.handle = None
+        self.timer = None
         self.Utils = self.get_app("utils")
         self.entity = self.args["entity"]
 
-        # Set up triggers
+        self.listen_state(self.set_states, self.entity)
+
         if "triggers" in self.args:
             for trigger in self.args["triggers"]:
                 if "entity" in trigger:
@@ -18,15 +23,13 @@ class InputSelect(hass.Hass):
                 elif "event" in trigger:
                     self.listen_event(self.event_callback, "deconz_event", id=trigger["event"], config=trigger)
 
-        # Listen to input_select.
-        self.listen_state(self.set_entities, self.entity)
-
-        # Listen to charging entity.
         if "charger_entity" in self.args:
             self.listen_state(self.is_charging, self.args["charger_entity"])
             self.listen_event(self.set_awake, "mobile_app_notification_action", action="yes")
 
-    # Callbacks
+    #############
+    # Callbacks #
+    #############
     def set_awake(self, event, data, kwargs):
         if "tag" in data:
             if data["tag"].split(" ")[0] == self.entity:
@@ -46,113 +49,114 @@ class InputSelect(hass.Hass):
                 )
 
     def entity_callback(self, entity, attribute, old, new, kwargs):
-        try:
-            self.run_trigger(kwargs["config"])
-        except Exception as e:
-            message = f"Trigger failed for {self.entity} with error: {e}"
-            self.call_service("notify/persistent_notification", message=message)
+        config = kwargs["config"]
+        if "state" in config:
+            if new == config["state"] and self.Utils.evaluate_conditions(config):
+                self.set_area(config, new)
+        if "expression" in config:
+            state = f'"{new}"' if not self.Utils.is_float(new) else new
+            if eval(f'{state} {config["expression"]}') and self.Utils.evaluate_conditions(config):
+                self.set_area(config, new)
 
     def event_callback(self, event, data, kwargs):
-        self.log(data["event"])
-        if data["event"] == kwargs["config"]["state"]:
-            try:
-                self.run_trigger(kwargs["config"])
-            except Exception as e:
-                message = f"Trigger failed for {self.entity} with error: {e}"
-                self.call_service("notify/persistent_notification", message=message)
+        config = kwargs["config"]
+        if data["event"] == config["state"] and self.Utils.evaluate_conditions(config):
+            self.set_area(config)
 
     def time_callback(self, kwargs):
-        try:
-            self.run_trigger(kwargs["config"])
-        except Exception as e:
-            message = f"Trigger failed for {self.entity} with error: {e}"
-            self.call_service("notify/persistent_notification", message=message)
+        config = kwargs["config"]
+        self.set_area(config)
 
-    def set_entities(self, entity, attribute, old, new, kwargs):
-        if "automation_boolean" in self.args:
-            if self.get_state(self.args["automation_boolean"]) == "off":
-                return
-
-        self.start_timeout(self.get_state(self.entity))
+    def set_states(self, entity, attribute, old, new, kwargs):
+        """
+        Sets the entity states for each entity in the states list.
+        """
+        self.log(f"{Fore.CYAN}{entity}{Style.RESET_ALL} > {Fore.GREEN}{new}{Style.RESET_ALL}")
         if "states" in self.args:
             if new in self.args["states"]:
+                self.log_trigger(entity, new)
                 self.Utils.set_entities(self.args["states"], new)
+                self.start_timeout(self.get_state(self.entity))
         if new == "Awake":
             self.run_in(self.set_home, 5)
-        elif new == "Disabled" and self.handle != None:
-            self.cancel_timer(self.handle)
+        elif new == "Disabled" and self.timer != None:
+            self.check_cancel_timer(self.timer)
 
-    def set_home(self, kwargs):
-        self.call_service("input_select/select_option", entity_id=self.entity, option="Home")
-
+    #############
+    # Functions #
+    #############
     def reset_to_idle(self, kwargs):
-        motion_list = []
+        """
+        Resets input_select to "Idle" if there's no motion sensor active, otherwise loops until there's no motion active.
+        """
+        motion = False
         for trigger in self.args["triggers"]:
-            if "entity" in trigger:
-                state = self.get_state(trigger["entity"], attribute="all")
-                if "device_class" in state["attributes"]:
-                    if state["attributes"]["device_class"] == "motion":
-                        if state["state"] == "on":
-                            motion_list.append(True)
-                        else:
-                            motion_list.append(False)
-        if True not in motion_list:
-            self.call_service("input_select/select_option", entity_id=self.entity, option="Idle")
-        else:
-            if self.handle != None:
-                self.cancel_timer(self.handle)
-            self.log(f"Trigger state still `on` for {self.entity} looping.")
-            self.handle = self.run_in(
+            if "entity" not in trigger:
+                continue
+            state = self.get_state(trigger["entity"], attribute="all")
+            if "device_class" not in state["attributes"]:
+                continue
+            if state["attributes"]["device_class"] != "motion":
+                continue
+            if state["state"] == "off":
+                continue
+            motion = True
+        if motion:
+            self.log(
+                f"Trigger state still {Fore.RED}on{Style.RESET_ALL} for {Fore.CYAN}{self.entity}{Style.RESET_ALL} looping."
+            )
+            self.timer = self.run_in(
                 self.reset_to_idle,
                 kwargs["time"],
                 time=kwargs["time"],
             )
+            return
+        self.call_service("input_select/select_option", entity_id=self.entity, option="Idle")
 
-    # Functions
-    def run_trigger(self, config):
-        # Generate a binary list of condition states
-        state_list = []
-        if "condition" in config:
-            for condition in config["condition"]:
-                if "state" in condition:
-                    if self.get_state(condition["entity"]) == condition["state"]:
-                        state_list.append(True)
-                    else:
-                        state_list.append(False)
-                elif "expression" in condition:
-                    entity_state = self.get_state(condition["entity"])
-                    entity_state = f'"{entity_state}"' if not self.Utils.is_float(entity_state) else entity_state
-                    if eval(f'{entity_state} {condition["expression"]}'):
-                        state_list.append(True)
-                    else:
-                        state_list.append(False)
-
-        # Check condition state list
-        if False not in state_list:
-            if "entity" in config:
-                state = self.get_state(config["entity"])
-                if "state" in config:
-                    if config["state"] == state:
-                        self.set_area(config)
-                elif "expression" in config:
-                    state = f'"{state}"' if not self.Utils.is_float(state) else state
-                    if eval(f'{state} {config["expression"]}'):
-                        self.set_area(config)
-            else:
-                self.set_area(config)
-
-    def set_area(self, config):
-        self.call_service(
+    def set_area(self, config, state=None):
+        """
+        Sets input_select to defined 'set_state'.
+        """
+        call_service = self.call_service(
             "input_select/select_option",
             entity_id=self.entity,
             option=config["set_state"],
         )
+        self.start_timeout(self.get_state(self.entity))
+        if len(call_service) == 0:
+            return
+        if "expression" in config:
+            self.log_trigger(config["entity"], f"{state} {config['expression']}")
+        elif "time" in config:
+            self.log_trigger(config["time"], config["set_state"])
+        elif "event" in config:
+            self.log_trigger(config["event"], state)
+        else:
+            self.log_trigger(config["entity"], state)
 
     def start_timeout(self, state):
+        """
+        Starts a timeout timer to reset input_select to 'Idle' if a timeout is defined.
+        """
         if "timeout" in self.args.keys():
             if state in self.args["timeout"]:
                 delay = self.args["timeout"][state]
-                if self.handle != None:
-                    self.cancel_timer(self.handle)
-                self.log(f"Resetting {self.entity} to Idle in {delay} seconds.")
-                self.handle = self.run_in(self.reset_to_idle, delay, time=delay)
+                if self.timer != None:
+                    self.check_cancel_timer(self.timer)
+                self.log(
+                    f"Resetting {Fore.CYAN}{self.entity}{Style.RESET_ALL} to Idle in {Fore.GREEN}{delay}{Style.RESET_ALL} seconds."
+                )
+                self.timer = self.run_in(self.reset_to_idle, delay, time=delay)
+
+    def log_trigger(self, entity, state):
+        self.log(f"{Fore.LIGHTBLUE_EX}{entity}{Style.RESET_ALL}: {Fore.YELLOW}{state}{Style.RESET_ALL}")
+
+    def set_home(self, kwargs):
+        self.call_service("input_select/select_option", entity_id=self.entity, option="Home")
+
+    def check_cancel_timer(self, handle):
+        scheduler_entries = self.get_scheduler_entries()
+        for se in scheduler_entries:
+            if handle in scheduler_entries[se].keys():
+                self.cancel_timer(handle)
+                self.log(f"{Fore.CYAN}{self.entity}{Style.RESET_ALL} timer {Fore.YELLOW}canceled{Style.RESET_ALL}.")

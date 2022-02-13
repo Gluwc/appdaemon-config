@@ -18,7 +18,7 @@ area_living_room:
         - entity: input_select.area_living_room
           expression: '!= "Disabled"'
         - entity: sensor.lux_motion_living_room
-          expression: "< 10"
+          expression: "<= 10"
     - entity: binary_sensor.motion_living_room
       state: "on"
       set_state: "Day"
@@ -26,15 +26,22 @@ area_living_room:
         - entity: input_select.area_living_room
           expression: '!= "Disabled"'
         - entity: sensor.lux_motion_living_room
-          expression: "> 25"
+          expression: "> 10"
         - entity: input_select.area_living_room
           expression: '!= "Manual"'
     - entity: sensor.lux_motion_living_room
-      expression: "< 10"
+      expression: "<= 10"
       set_state: "Night"
       condition:
         - entity: input_select.area_living_room
           expression: '!= "Disabled"'
+    - entity: sensor.lux_motion_living_room
+      expression: "> 10"
+      set_state: "Day"
+      condition:
+        - entity: input_select.area_living_room
+          expression: '!= "Disabled"'
+
 
   # States
   states:

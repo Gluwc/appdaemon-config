@@ -74,8 +74,24 @@ area_home:
         state: Idle
       - entity: input_select.area_bedroom
         state: Day
+        condition:
+          - entity: sensor.lux_motion_living_room
+            expression: "> 10"
+      - entity: input_select.area_bedroom
+        state: Night
+        condition:
+          - entity: sensor.lux_motion_living_room
+            expression: "<= 10"
       - entity: input_select.area_living_room
         state: Day
+        condition:
+          - entity: sensor.lux_motion_living_room
+            expression: "> 10"
+      - entity: input_select.area_living_room
+        state: Night
+        condition:
+          - entity: sensor.lux_motion_living_room
+            expression: "<= 10"
       - entity: input_select.area_hallway
         state: Idle
     Away:
