@@ -22,16 +22,8 @@ area_toilet:
       condition:
         - entity: input_select.area_toilet
           expression: '!= "Disabled"'
-        - entity: input_select.person_elisa
-          expression: '!= "Sleeping"'
         - entity: input_select.person_lucas
           expression: '!= "Sleeping"'
-    - entity: binary_sensor.motion_toilet
-      state: "on"
-      set_state: "Sleeping"
-      condition:
-        - entity: input_select.person_elisa
-          state: "Sleeping"
     - entity: binary_sensor.motion_toilet
       state: "on"
       set_state: "Sleeping"

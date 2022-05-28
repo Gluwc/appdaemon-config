@@ -11,57 +11,15 @@ area_home:
     - entity: input_select.person_lucas
       state: Home
       set_state: Home
-      condition:
-        - entity: input_select.person_elisa
-          expression: '!= "Sleeping"'
-        - entity: input_select.person_elisa
-          expression: '!= "Home"'
     - entity: input_select.person_lucas
       state: Away
       set_state: Away
-      condition:
-        - entity: input_select.person_elisa
-          state: "Away"
     - entity: input_select.person_lucas
       state: Sleeping
       set_state: Sleeping
-      condition:
-        - entity: input_select.person_elisa
-          expression: '!= "Home"'
     - entity: input_select.person_lucas
       state: Awake
       set_state: Awake
-      condition:
-        - entity: input_select.person_elisa
-          expression: '!= "Sleeping"'
-
-    # Elisa
-    - entity: input_select.person_elisa
-      state: Home
-      set_state: Home
-      condition:
-        - entity: input_select.person_lucas
-          expression: '!= "Sleeping"'
-        - entity: input_select.person_lucas
-          expression: '!= "Home"'
-    - entity: input_select.person_elisa
-      state: Away
-      set_state: Away
-      condition:
-        - entity: input_select.person_lucas
-          state: "Away"
-    - entity: input_select.person_elisa
-      state: Sleeping
-      set_state: Sleeping
-      condition:
-        - entity: input_select.person_lucas
-          expression: '!= "Home"'
-    - entity: input_select.person_elisa
-      state: Awake
-      set_state: Awake
-      condition:
-        - entity: input_select.person_lucas
-          expression: '!= "Sleeping"'
 
   # States
   states:

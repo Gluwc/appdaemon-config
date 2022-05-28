@@ -3,6 +3,7 @@ mediaplayer_chromecast:
   class: MediaPlayer
   entity: media_player.chromecast
   linked: media_player.tv
+  linked_source: HDMI 3/ARC
 
 mediaplayer_stereo:
   module: MediaPlayer

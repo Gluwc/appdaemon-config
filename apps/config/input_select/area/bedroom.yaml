@@ -33,6 +33,9 @@ area_bedroom:
       condition:
         - entity: input_select.area_bedroom
           expression: '!= "Disabled"'
+    - event: switch_bed_right_bedroom
+      state: 4000
+      set_state: "Disabled"
 
   # States
   states:

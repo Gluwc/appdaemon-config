@@ -29,6 +29,10 @@ class MediaPlayer(hass.Hass):
             self.call_service("media_player/volume_set", entity_id=self.args["entity"], volume_level=kwargs["volume"])
 
     def turn_off_linked(self, kwargs):
+        if "linked_source" in self.args.keys():
+            source = self.get_state(entity_id=self.linked, attribute="source")
+            if source != self.args["linked_source"]:
+                return
         player_state = self.get_state(entity_id=self.entity)
         if player_state == "off":
             if self.remote_device:

@@ -1,5 +1,5 @@
 import hassapi as hass
-from colorama import Fore, Back, Style
+from colorama import Fore, Style
 
 
 class InputSelect(hass.Hass):
@@ -27,14 +27,7 @@ class InputSelect(hass.Hass):
             self.listen_state(self.is_charging, self.args["charger_entity"])
             self.listen_event(self.set_awake, "mobile_app_notification_action", action="yes")
 
-    #############
-    # Callbacks #
-    #############
-    def set_awake(self, event, data, kwargs):
-        if "tag" in data:
-            if data["tag"].split(" ")[0] == self.entity:
-                self.select_option(self.entity, "Awake")
-
+    # State callbacks
     def is_charging(self, entity, attribute, old, new, kwargs):
         if self.get_state(self.args["entity"]) == "Sleeping":
             if new == "none":
@@ -63,10 +56,6 @@ class InputSelect(hass.Hass):
         if data["event"] == config["state"] and self.Utils.evaluate_conditions(config):
             self.set_area(config)
 
-    def time_callback(self, kwargs):
-        config = kwargs["config"]
-        self.set_area(config)
-
     def set_states(self, entity, attribute, old, new, kwargs):
         """
         Sets the entity states for each entity in the states list.
@@ -79,12 +68,22 @@ class InputSelect(hass.Hass):
                 self.start_timeout(self.get_state(self.entity))
         if new == "Awake":
             self.run_in(self.set_home, 5)
-        elif new == "Disabled" and self.timer != None:
+        elif new == "Disabled" or new == "Idle":
             self.check_cancel_timer(self.timer)
 
-    #############
-    # Functions #
-    #############
+    # Event callbacks
+    def set_awake(self, event, data, kwargs):
+        if "tag" in data:
+            if data["tag"].split(" ")[0] == self.entity:
+                self.select_option(self.entity, "Awake")
+
+    # Scheduler callbacks
+    def time_callback(self, kwargs):
+        self.set_area(kwargs["config"])
+
+    def set_home(self, kwargs):
+        self.call_service("input_select/select_option", entity_id=self.entity, option="Home")
+
     def reset_to_idle(self, kwargs):
         """
         Resets input_select to "Idle" if there's no motion sensor active, otherwise loops until there's no motion active.
@@ -113,6 +112,7 @@ class InputSelect(hass.Hass):
             return
         self.call_service("input_select/select_option", entity_id=self.entity, option="Idle")
 
+    # Functions
     def set_area(self, config, state=None):
         """
         Sets input_select to defined 'set_state'.
@@ -141,22 +141,18 @@ class InputSelect(hass.Hass):
         if "timeout" in self.args.keys():
             if state in self.args["timeout"]:
                 delay = self.args["timeout"][state]
-                if self.timer != None:
-                    self.check_cancel_timer(self.timer)
+                self.check_cancel_timer(self.timer)
                 self.log(
-                    f"Resetting {Fore.CYAN}{self.entity}{Style.RESET_ALL} to Idle in {Fore.GREEN}{delay}{Style.RESET_ALL} seconds."
+                    f"{Fore.CYAN}{self.entity}{Style.RESET_ALL} timer {Fore.GREEN}{delay}{Style.RESET_ALL}"
                 )
                 self.timer = self.run_in(self.reset_to_idle, delay, time=delay)
 
     def log_trigger(self, entity, state):
-        self.log(f"{Fore.LIGHTBLUE_EX}{entity}{Style.RESET_ALL}: {Fore.YELLOW}{state}{Style.RESET_ALL}")
-
-    def set_home(self, kwargs):
-        self.call_service("input_select/select_option", entity_id=self.entity, option="Home")
+        self.log(f"{Fore.LIGHTBLUE_EX}{entity}{Style.RESET_ALL} = {Fore.YELLOW}{state}{Style.RESET_ALL}")
 
     def check_cancel_timer(self, handle):
         scheduler_entries = self.get_scheduler_entries()
         for se in scheduler_entries:
             if handle in scheduler_entries[se].keys():
                 self.cancel_timer(handle)
-                self.log(f"{Fore.CYAN}{self.entity}{Style.RESET_ALL} timer {Fore.YELLOW}canceled{Style.RESET_ALL}.")
+                self.log(f"{Fore.CYAN}{self.entity}{Style.RESET_ALL} timer {Fore.YELLOW}canceled{Style.RESET_ALL}")
