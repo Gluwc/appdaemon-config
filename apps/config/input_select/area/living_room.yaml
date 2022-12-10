@@ -18,7 +18,7 @@ area_living_room:
         - entity: input_select.area_living_room
           expression: '!= "Disabled"'
         - entity: sensor.lux_motion_living_room
-          expression: "<= 10"
+          expression: "<= 15"
     - entity: binary_sensor.motion_living_room
       state: "on"
       set_state: "Day"
@@ -30,7 +30,7 @@ area_living_room:
         - entity: input_select.area_living_room
           expression: '!= "Manual"'
     - entity: sensor.lux_motion_living_room
-      expression: "<= 10"
+      expression: "<= 15"
       set_state: "Night"
       condition:
         - entity: input_select.area_living_room
@@ -47,27 +47,27 @@ area_living_room:
   states:
     Day:
       - entity: fan.living_room
-        state: "on"
+        state: 10
       - entity: cover.curtains_living_room
         state: 100
       - entity: light.group_living_room
         state: "off"
-      - entity: media_player.tv
+      - entity: media_player.sony_bravia_tv
         volume: 0.1
     Night:
       - entity: light.group_living_room
         state: "on"
         brightness: 75
       - entity: fan.living_room
-        state: "on"
-      - entity: media_player.tv
+        state: 10
+      - entity: media_player.sony_bravia_tv
         volume: 0.1
     Disabled:
       - entity: media_player.chromecast
         state: "off"
-      - entity: media_player.tv
+      - entity: media_player.sony_bravia_tv
         state: "off"
       - entity: fan.living_room
-        state: "off"
+        state: 0
       - entity: light.group_living_room
         state: "off"

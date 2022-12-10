@@ -3,6 +3,7 @@ import hassapi as hass
 
 class Thermostat(hass.Hass):
     def initialize(self):
+        self.Utils = self.get_app("utils")
         # Set up contact_sensors
         self.contact_sensors = self.args["contact_sensors"]
         if "contact_sensors" in self.args:
@@ -31,5 +32,4 @@ class Thermostat(hass.Hass):
             sensor_states.append(self.get_state(sensor["entity"]))
         if "on" in sensor_states:
             return False
-        elif "on" not in sensor_states:
-            return True
+        return True

@@ -20,6 +20,10 @@ area_home:
     - entity: input_select.person_lucas
       state: Awake
       set_state: Awake
+    - entity: sensor.climate_temperature_motion_living_room
+      expression: "> 25"
+      set_state: Cooling
+
 
   # States
   states:
@@ -52,6 +56,10 @@ area_home:
             expression: "<= 10"
       - entity: input_select.area_hallway
         state: Idle
+      - entity: cover.curtains_bedroom
+        state: 100
+      - entity: cover.curtains_living_room
+        state: 100
     Away:
       - entity: input_select.area_kitchen
         state: Disabled
@@ -65,6 +73,10 @@ area_home:
         state: Disabled
       - entity: input_select.area_hallway
         state: Idle
+      - entity: media_player.home
+        state: "off"
+      - entity: climate.softwarethermostat
+        state: 18
     Sleeping:
       - entity: input_select.area_kitchen
         state: Disabled
@@ -80,14 +92,10 @@ area_home:
         state: Idle
       - entity: light.mirror_bathroom
         state: "off"
-      - entity: input_select.animal_luna
-        state: "Sleeping"
       - entity: input_select.animal_iera
         state: "Sleeping"
-      - entity: input_select.animal_pluis
-        state: "Sleeping"
       - entity: climate.softwarethermostat
-        state: 20
+        state: 18
     Awake:
       - entity: input_select.area_kitchen
         state: Idle
@@ -101,15 +109,11 @@ area_home:
         state: Day
       - entity: input_select.area_hallway
         state: Idle
-      - entity: input_select.animal_luna
-        state: "Home"
       - entity: input_select.animal_iera
-        state: "Home"
-      - entity: input_select.animal_pluis
         state: "Home"
     Heating:
       - entity: climate.softwarethermostat
         state: 22
     Cooling:
       - entity: climate.softwarethermostat
-        state: 20
+        state: 18

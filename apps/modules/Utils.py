@@ -40,7 +40,7 @@ class Utils(hass.Hass):
             elif domain == "switch":
                 self.call_service("switch/turn_" + entity["state"], entity_id=entity["entity"])
             elif domain == "fan":
-                self.call_service("fan/turn_" + entity["state"], entity_id=entity["entity"])
+                self.call_service("fan/set_percentage", percentage=entity["state"], entity_id=entity["entity"])
             elif domain == "light":
                 brightness = entity["brightness"] if "brightness" in entity else 100
                 if entity["state"] == "on":
@@ -81,5 +81,5 @@ class Utils(hass.Hass):
                 entity_state = self.get_state(condition["entity"])
                 entity_state = f'"{entity_state}"' if not self.is_float(entity_state) else entity_state
                 if not eval(f'{entity_state} {condition["expression"]}'):
-                    return
+                    return False
         return True

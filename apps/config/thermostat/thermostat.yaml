@@ -6,3 +6,6 @@ thermostat:
     - entity: binary_sensor.contact_door_kitchen
     - entity: binary_sensor.contact_window_left_living_room
     - entity: binary_sensor.contact_window_right_living_room
+  condition:
+    - entity: sensor.climate_temperature_motion_living_room
+      expression: "< 18"

@@ -123,6 +123,8 @@ class InputSelect(hass.Hass):
             option=config["set_state"],
         )
         self.start_timeout(self.get_state(self.entity))
+        if call_service is None:
+            return
         if len(call_service) == 0:
             return
         if "expression" in config:

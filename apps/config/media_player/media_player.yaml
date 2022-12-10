@@ -2,7 +2,7 @@ mediaplayer_chromecast:
   module: MediaPlayer
   class: MediaPlayer
   entity: media_player.chromecast
-  linked: media_player.tv
+  linked: media_player.sony_bravia_tv
   linked_source: HDMI 3/ARC
 
 mediaplayer_stereo:
@@ -15,7 +15,7 @@ mediaplayer_stereo:
 mediaplayer_living_room:
   module: MediaPlayer
   class: MediaPlayer
-  entity: media_player.speaker_living_room
+  entity: media_player.hub_living_room
   adjust_volume: true
 
 mediaplayer_kitchen:
@@ -24,14 +24,14 @@ mediaplayer_kitchen:
   entity: media_player.speaker_kitchen
   adjust_volume: true
 
-mediaplayer_bedroom:
-  module: MediaPlayer
-  class: MediaPlayer
-  entity: media_player.speaker_bedroom
-  adjust_volume: true
+# mediaplayer_bedroom:
+#   module: MediaPlayer
+#   class: MediaPlayer
+#   entity: media_player.speaker_bedroom
+#   adjust_volume: true
 
 mediaplayer_tv:
   module: MediaPlayer
   class: MediaPlayer
-  entity: media_player.tv
+  entity: media_player.sony_bravia_tv
   set_volume: 0.1

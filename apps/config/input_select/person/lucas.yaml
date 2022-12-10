@@ -7,7 +7,7 @@ person_lucas:
   entity: input_select.person_lucas
 
   # Charger Entity
-  charger_entity: sensor.charger_type_phone_lucas
+  # charger_entity: sensor.charger_type_phone_lucas
 
   # Mobile App
   mobile_app: mobile_app_phone_lucas
@@ -44,10 +44,8 @@ person_lucas:
       - entity: input_select.area_mirror_bathroom
         state: "Idle"
       - entity: fan.living_room
-        state: "off"
-      - entity: switch.pc_lucas
-        state: "off"
-      - entity: media_player.tv
+        state: 0
+      - entity: media_player.sony_bravia_tv
         volume: 0.05
       - entity: light.tv_living_room
         state: "on"
@@ -56,11 +54,10 @@ person_lucas:
         state: 0
       - entity: cover.curtains_bedroom
         state: 0
+      - entity: input_boolean.sleeping_lucas
+        state: "on"
     Awake:
       - entity: cover.curtains_living_room
         state: 100
       - entity: input_boolean.sleeping_lucas
-        state: "off"
-    Away:
-      - entity: switch.pc_lucas
         state: "off"
